@@ -1,0 +1,84 @@
+transcript on
+if ![file isdirectory verilog_libs] {
+	file mkdir verilog_libs
+}
+
+vlib verilog_libs/altera_ver
+vmap altera_ver ./verilog_libs/altera_ver
+vlog -vlog01compat -work altera_ver {d:/baidunetdiskdownload/new_quartus/quartus/eda/sim_lib/altera_primitives.v}
+
+vlib verilog_libs/lpm_ver
+vmap lpm_ver ./verilog_libs/lpm_ver
+vlog -vlog01compat -work lpm_ver {d:/baidunetdiskdownload/new_quartus/quartus/eda/sim_lib/220model.v}
+
+vlib verilog_libs/sgate_ver
+vmap sgate_ver ./verilog_libs/sgate_ver
+vlog -vlog01compat -work sgate_ver {d:/baidunetdiskdownload/new_quartus/quartus/eda/sim_lib/sgate.v}
+
+vlib verilog_libs/altera_mf_ver
+vmap altera_mf_ver ./verilog_libs/altera_mf_ver
+vlog -vlog01compat -work altera_mf_ver {d:/baidunetdiskdownload/new_quartus/quartus/eda/sim_lib/altera_mf.v}
+
+vlib verilog_libs/altera_lnsim_ver
+vmap altera_lnsim_ver ./verilog_libs/altera_lnsim_ver
+vlog -sv -work altera_lnsim_ver {d:/baidunetdiskdownload/new_quartus/quartus/eda/sim_lib/altera_lnsim.sv}
+
+vlib verilog_libs/cycloneive_ver
+vmap cycloneive_ver ./verilog_libs/cycloneive_ver
+vlog -vlog01compat -work cycloneive_ver {d:/baidunetdiskdownload/new_quartus/quartus/eda/sim_lib/cycloneive_atoms.v}
+
+if {[file exists rtl_work]} {
+	vdel -lib rtl_work -all
+}
+vlib rtl_work
+vmap work rtl_work
+
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/ip/cangku_pos {D:/CICC0906044/CICC0906044/ip/cangku_pos/cangku_pos_rom.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src {D:/CICC0906044/CICC0906044/src/block_ctrl.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/robotic {D:/CICC0906044/CICC0906044/src/robotic/servo_unit.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/robotic {D:/CICC0906044/CICC0906044/src/robotic/servo_ctrl.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/robotic {D:/CICC0906044/CICC0906044/src/robotic/sqrt_ctrl.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/ip/DIV {D:/CICC0906044/CICC0906044/ip/DIV/DIV.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/robotic {D:/CICC0906044/CICC0906044/src/robotic/jixiebi_top.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/img_pro {D:/CICC0906044/CICC0906044/src/img_pro/data_ctrl.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/robotic {D:/CICC0906044/CICC0906044/src/robotic/Multi_Servo.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/robotic {D:/CICC0906044/CICC0906044/src/robotic/Inverse_kinematics_ak.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/robotic {D:/CICC0906044/CICC0906044/src/robotic/cangku_lut.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/ip/sqrt {D:/CICC0906044/CICC0906044/ip/sqrt/sqrt.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/ip/Acos_Rom {D:/CICC0906044/CICC0906044/ip/Acos_Rom/Acos_Rom.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/ip/ram {D:/CICC0906044/CICC0906044/ip/ram/ram.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/img_pro {D:/CICC0906044/CICC0906044/src/img_pro/Line_Shift_RAM_1Bit.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/img_pro {D:/CICC0906044/CICC0906044/src/img_pro/Matrix_Generate_3X3_1Bit.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/img_pro {D:/CICC0906044/CICC0906044/src/img_pro/Bit_Erosion_Detector.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/img_pro {D:/CICC0906044/CICC0906044/src/img_pro/RGB2HSV.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/img_pro {D:/CICC0906044/CICC0906044/src/img_pro/img_pro.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/img_pro {D:/CICC0906044/CICC0906044/src/img_pro/HSV_binarization.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/img_pro {D:/CICC0906044/CICC0906044/src/img_pro/divide.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/ip/pll_clk {D:/CICC0906044/CICC0906044/ip/pll_clk/pll_clk.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src {D:/CICC0906044/CICC0906044/src/jichuang.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/ov5640 {D:/CICC0906044/CICC0906044/src/ov5640/vga_driver.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/ov5640 {D:/CICC0906044/CICC0906044/src/ov5640/i2c_ov5640_rgb565_cfg.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/ov5640 {D:/CICC0906044/CICC0906044/src/ov5640/i2c_dri.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/ov5640 {D:/CICC0906044/CICC0906044/src/ov5640/cmos_capture_data.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/sdram {D:/CICC0906044/CICC0906044/src/sdram/wrfifo.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/sdram {D:/CICC0906044/CICC0906044/src/sdram/sdram_top.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/sdram {D:/CICC0906044/CICC0906044/src/sdram/sdram_para.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/sdram {D:/CICC0906044/CICC0906044/src/sdram/sdram_fifo_ctrl.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/sdram {D:/CICC0906044/CICC0906044/src/sdram/sdram_controller.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/sdram {D:/CICC0906044/CICC0906044/src/sdram/rdfifo.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/ip/target_init_rom {D:/CICC0906044/CICC0906044/ip/target_init_rom/target_init_rom.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/prj/db {D:/CICC0906044/CICC0906044/prj/db/pll_clk_altpll.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/sdram {D:/CICC0906044/CICC0906044/src/sdram/sdram_data.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/sdram {D:/CICC0906044/CICC0906044/src/sdram/sdram_ctrl.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/sdram {D:/CICC0906044/CICC0906044/src/sdram/sdram_cmd.v}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/img_pro {D:/CICC0906044/CICC0906044/src/img_pro/VIP_Video_add_rectangular.sv}
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/src/img_pro {D:/CICC0906044/CICC0906044/src/img_pro/VIP_multi_target_detect.sv}
+
+vlog -sv -work work +incdir+D:/CICC0906044/CICC0906044/prj/../sim {D:/CICC0906044/CICC0906044/prj/../sim/tb_angle_bias_pro.v}
+
+vsim -t 1ps -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneive_ver -L rtl_work -L work -voptargs="+acc"  tb_angle_bias_pro
+
+add wave *
+view structure
+view signals
+run 1 ms

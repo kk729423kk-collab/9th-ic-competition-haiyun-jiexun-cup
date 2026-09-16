@@ -1,0 +1,273 @@
+# -------------------------------------------------------------------------- #
+#
+# Copyright (C) 2018  Intel Corporation. All rights reserved.
+# Your use of Intel Corporation's design tools, logic functions 
+# and other software and tools, and its AMPP partner logic 
+# functions, and any output files from any of the foregoing 
+# (including device programming or simulation files), and any 
+# associated documentation or information are expressly subject 
+# to the terms and conditions of the Intel Program License 
+# Subscription Agreement, the Intel Quartus Prime License Agreement,
+# the Intel FPGA IP License Agreement, or other applicable license
+# agreement, including, without limitation, that your use is for
+# the sole purpose of programming logic devices manufactured by
+# Intel and sold by Intel or its authorized distributors.  Please
+# refer to the applicable agreement for further details.
+#
+# -------------------------------------------------------------------------- #
+#
+# Quartus Prime
+# Version 18.1.0 Build 625 09/12/2018 SJ Standard Edition
+# Date created = 14:00:50  April 12, 2025
+#
+# -------------------------------------------------------------------------- #
+#
+# Notes:
+#
+# 1) The default values for assignments are stored in the file:
+#		jichuang_assignment_defaults.qdf
+#    If this file doesn't exist, see file:
+#		assignment_defaults.qdf
+#
+# 2) Altera recommends that you do not modify this file. This
+#    file is updated automatically by the Quartus Prime software
+#    and any changes you make may be lost or overwritten.
+#
+# -------------------------------------------------------------------------- #
+
+
+set_global_assignment -name FAMILY "Cyclone IV E"
+set_global_assignment -name DEVICE EP4CE6F17C8
+set_global_assignment -name TOP_LEVEL_ENTITY jichuang
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION 18.1.0
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "14:00:50  APRIL 12, 2025"
+set_global_assignment -name LAST_QUARTUS_VERSION "18.1.0 Standard Edition"
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 1
+set_global_assignment -name NOMINAL_CORE_SUPPLY_VOLTAGE 1.2V
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_location_assignment PIN_C3 -to cam_data[7]
+set_location_assignment PIN_E5 -to cam_data[6]
+set_location_assignment PIN_F2 -to cam_data[5]
+set_location_assignment PIN_F3 -to cam_data[4]
+set_location_assignment PIN_M1 -to cam_data[3]
+set_location_assignment PIN_D4 -to cam_data[2]
+set_location_assignment PIN_G5 -to cam_data[1]
+set_location_assignment PIN_F5 -to cam_data[0]
+set_location_assignment PIN_D1 -to cam_href
+set_location_assignment PIN_D5 -to cam_pclk
+set_location_assignment PIN_G2 -to cam_pwdn
+set_location_assignment PIN_F1 -to cam_rst_n
+set_location_assignment PIN_C6 -to cam_scl
+set_location_assignment PIN_D6 -to cam_sda
+set_location_assignment PIN_F6 -to cam_vsync
+set_location_assignment PIN_T15 -to sdram_addr[12]
+set_location_assignment PIN_R16 -to sdram_addr[11]
+set_location_assignment PIN_R8 -to sdram_addr[10]
+set_location_assignment PIN_P15 -to sdram_addr[9]
+set_location_assignment PIN_P16 -to sdram_addr[8]
+set_location_assignment PIN_N15 -to sdram_addr[7]
+set_location_assignment PIN_N16 -to sdram_addr[6]
+set_location_assignment PIN_L15 -to sdram_addr[5]
+set_location_assignment PIN_L16 -to sdram_addr[4]
+set_location_assignment PIN_R9 -to sdram_addr[3]
+set_location_assignment PIN_T9 -to sdram_addr[2]
+set_location_assignment PIN_P9 -to sdram_addr[1]
+set_location_assignment PIN_T8 -to sdram_addr[0]
+set_location_assignment PIN_T7 -to sdram_ba[1]
+set_location_assignment PIN_R7 -to sdram_ba[0]
+set_location_assignment PIN_T5 -to sdram_cas_n
+set_location_assignment PIN_R14 -to sdram_cke
+set_location_assignment PIN_R4 -to sdram_clk
+set_location_assignment PIN_T6 -to sdram_cs_n
+set_location_assignment PIN_R11 -to sdram_data[15]
+set_location_assignment PIN_T11 -to sdram_data[14]
+set_location_assignment PIN_R10 -to sdram_data[13]
+set_location_assignment PIN_T10 -to sdram_data[12]
+set_location_assignment PIN_T12 -to sdram_data[11]
+set_location_assignment PIN_R12 -to sdram_data[10]
+set_location_assignment PIN_T13 -to sdram_data[9]
+set_location_assignment PIN_R13 -to sdram_data[8]
+set_location_assignment PIN_P1 -to sdram_data[7]
+set_location_assignment PIN_P2 -to sdram_data[6]
+set_location_assignment PIN_R1 -to sdram_data[5]
+set_location_assignment PIN_T2 -to sdram_data[4]
+set_location_assignment PIN_R3 -to sdram_data[3]
+set_location_assignment PIN_T3 -to sdram_data[2]
+set_location_assignment PIN_T4 -to sdram_data[1]
+set_location_assignment PIN_R5 -to sdram_data[0]
+set_location_assignment PIN_T14 -to sdram_dqm[1]
+set_location_assignment PIN_N2 -to sdram_dqm[0]
+set_location_assignment PIN_R6 -to sdram_ras_n
+set_location_assignment PIN_N1 -to sdram_we_n
+set_location_assignment PIN_E1 -to sys_clk
+set_location_assignment PIN_E15 -to sys_rst_n
+set_location_assignment PIN_C16 -to vga_hs
+set_location_assignment PIN_C8 -to vga_rgb[15]
+set_location_assignment PIN_A9 -to vga_rgb[14]
+set_location_assignment PIN_B9 -to vga_rgb[13]
+set_location_assignment PIN_A10 -to vga_rgb[12]
+set_location_assignment PIN_B10 -to vga_rgb[11]
+set_location_assignment PIN_A11 -to vga_rgb[10]
+set_location_assignment PIN_B11 -to vga_rgb[9]
+set_location_assignment PIN_A12 -to vga_rgb[8]
+set_location_assignment PIN_B12 -to vga_rgb[7]
+set_location_assignment PIN_A13 -to vga_rgb[6]
+set_location_assignment PIN_B13 -to vga_rgb[5]
+set_location_assignment PIN_A14 -to vga_rgb[4]
+set_location_assignment PIN_B14 -to vga_rgb[3]
+set_location_assignment PIN_A15 -to vga_rgb[2]
+set_location_assignment PIN_B16 -to vga_rgb[1]
+set_location_assignment PIN_C15 -to vga_rgb[0]
+set_location_assignment PIN_D15 -to vga_vs
+set_location_assignment PIN_G1 -to tx
+set_location_assignment PIN_M2 -to rx
+set_location_assignment PIN_M15 -to key_in1
+set_location_assignment PIN_A5 -to seg_dig[7]
+set_location_assignment PIN_B8 -to seg_dig[6]
+set_location_assignment PIN_A7 -to seg_dig[5]
+set_location_assignment PIN_B6 -to seg_dig[4]
+set_location_assignment PIN_B5 -to seg_dig[3]
+set_location_assignment PIN_A6 -to seg_dig[2]
+set_location_assignment PIN_A8 -to seg_dig[1]
+set_location_assignment PIN_B7 -to seg_dig[0]
+set_location_assignment PIN_A4 -to seg_sel[5]
+set_location_assignment PIN_B4 -to seg_sel[4]
+set_location_assignment PIN_A3 -to seg_sel[3]
+set_location_assignment PIN_B3 -to seg_sel[2]
+set_location_assignment PIN_A2 -to seg_sel[1]
+set_location_assignment PIN_B1 -to seg_sel[0]
+set_global_assignment -name VERILOG_INPUT_VERSION SYSTEMVERILOG_2005
+set_global_assignment -name VERILOG_SHOW_LMF_MAPPING_MESSAGES OFF
+set_location_assignment PIN_E16 -to key_in2
+set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim (Verilog)"
+set_global_assignment -name EDA_TIME_SCALE "1 ps" -section_id eda_simulation
+set_global_assignment -name EDA_OUTPUT_DATA_FORMAT "VERILOG HDL" -section_id eda_simulation
+set_global_assignment -name EDA_TEST_BENCH_ENABLE_STATUS TEST_BENCH_MODE -section_id eda_simulation
+set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH tb_angle_bias_pro -section_id eda_simulation
+set_global_assignment -name OPTIMIZATION_MODE BALANCED
+set_global_assignment -name EDA_TEST_BENCH_NAME tb_jixiebi_top -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id tb_jixiebi_top
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "1 us" -section_id tb_jixiebi_top
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME tb_jixiebi_top -section_id tb_jixiebi_top
+set_global_assignment -name EDA_TEST_BENCH_NAME five_servo_control_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id five_servo_control_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "1 ms" -section_id five_servo_control_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME five_servo_control_tb -section_id five_servo_control_tb
+set_location_assignment PIN_E7 -to pwm_servo1
+set_location_assignment PIN_D8 -to pwm_servo2
+set_location_assignment PIN_E8 -to pwm_servo3
+set_location_assignment PIN_F7 -to pwm_servo4
+set_location_assignment PIN_F9 -to pwm_servo5
+set_global_assignment -name EDA_TEST_BENCH_NAME tb_servo -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id tb_servo
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "1 ms" -section_id tb_servo
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME tb_servo -section_id tb_servo
+set_global_assignment -name FORCE_SYNCH_CLEAR ON
+set_global_assignment -name AUTO_RESOURCE_SHARING ON
+set_global_assignment -name EDA_TEST_BENCH_NAME tb_block_ctrl -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id tb_block_ctrl
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "1 s" -section_id tb_block_ctrl
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME tb_block_ctrl -section_id tb_block_ctrl
+set_location_assignment PIN_M9 -to switch1
+set_global_assignment -name EDA_TEST_BENCH_NAME test -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id test
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "1 us" -section_id test
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME test -section_id test
+set_location_assignment PIN_N12 -to color_switch2
+set_location_assignment PIN_N9 -to color_switch3
+set_location_assignment PIN_F16 -to debug_led[0]
+set_location_assignment PIN_F15 -to debug_led[1]
+set_location_assignment PIN_D16 -to debug_led[2]
+set_global_assignment -name ENABLE_OCT_DONE OFF
+set_global_assignment -name ENABLE_CONFIGURATION_PINS OFF
+set_global_assignment -name ENABLE_BOOT_SEL_PIN OFF
+set_global_assignment -name USE_CONFIGURATION_DEVICE OFF
+set_global_assignment -name CRC_ERROR_OPEN_DRAIN OFF
+set_global_assignment -name CYCLONEII_RESERVE_NCEO_AFTER_CONFIGURATION "USE AS REGULAR IO"
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -fall
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -fall
+set_location_assignment PIN_D9 -to pump_ctrl
+set_global_assignment -name VERILOG_FILE ../sim/tb_angle_bias_pro.v
+set_global_assignment -name VERILOG_FILE "../src/img_pro/Bias angle_pro.v"
+set_global_assignment -name QIP_FILE ../ip/cangku_pos/cangku_pos_rom.qip
+set_global_assignment -name VERILOG_FILE ../sim/test.v
+set_global_assignment -name VERILOG_FILE ../sim/tb_block_ctrl.v
+set_global_assignment -name VERILOG_FILE ../src/block_ctrl.v
+set_global_assignment -name VERILOG_FILE ../src/robotic/servo_unit.v
+set_global_assignment -name VERILOG_FILE ../sim/tb_servo.v
+set_global_assignment -name VERILOG_FILE ../sim/tb_jixiebi_top.v
+set_global_assignment -name VERILOG_FILE ../src/robotic/servo_ctrl.v
+set_global_assignment -name VERILOG_FILE ../src/robotic/sqrt_ctrl.v
+set_global_assignment -name QIP_FILE ../ip/DIV/DIV.qip
+set_global_assignment -name VERILOG_FILE ../src/robotic/jixiebi_top.v
+set_global_assignment -name VERILOG_FILE ../src/img_pro/data_ctrl.v
+set_global_assignment -name VERILOG_FILE ../src/robotic/qibeng_ctrl.v
+set_global_assignment -name VERILOG_FILE ../src/robotic/Multi_Servo.v
+set_global_assignment -name VERILOG_FILE ../src/robotic/Inverse_kinematics_ak.v
+set_global_assignment -name VERILOG_FILE ../src/robotic/cangku_lut.v
+set_global_assignment -name QIP_FILE ../ip/sqrt/sqrt.qip
+set_global_assignment -name QIP_FILE ../ip/Atan_Rom/Atan_Rom.qip
+set_global_assignment -name QIP_FILE ../ip/Acos_Rom/Acos_Rom.qip
+set_global_assignment -name SYSTEMVERILOG_FILE ../src/img_pro/VIP_Video_add_rectangular.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../src/img_pro/VIP_multi_target_detect.sv
+set_global_assignment -name QIP_FILE ../ip/ram/ram.qip
+set_global_assignment -name VERILOG_FILE ../src/img_pro/Line_Shift_RAM_1Bit.v
+set_global_assignment -name QIP_FILE ../ip/fifo_line_buffer/fifo_line_buffer.qip
+set_global_assignment -name VERILOG_FILE ../src/img_pro/Matrix_Generate_3X3_1Bit.v
+set_global_assignment -name VERILOG_FILE ../src/img_pro/Bit_Erosion_Detector.v
+set_global_assignment -name VERILOG_FILE ../src/img_pro/Bit_Dilation_Detector.v
+set_global_assignment -name VERILOG_FILE "../src/key,smg/seg_driver.v"
+set_global_assignment -name VERILOG_FILE "../src/key,smg/key_scan.v"
+set_global_assignment -name VERILOG_FILE ../src/Serial/uart_tx.v
+set_global_assignment -name VERILOG_FILE ../src/Serial/uart_rx.v
+set_global_assignment -name VERILOG_FILE ../src/Serial/tx_pro.v
+set_global_assignment -name VERILOG_FILE ../src/Serial/rx_pro.v
+set_global_assignment -name VERILOG_FILE ../src/img_pro/RGB2HSV.v
+set_global_assignment -name VERILOG_FILE ../src/img_pro/img_pro.v
+set_global_assignment -name VERILOG_FILE ../src/img_pro/HSV_binarization.v
+set_global_assignment -name VERILOG_FILE ../src/img_pro/divide.v
+set_global_assignment -name QIP_FILE ../ip/pll_clk/pll_clk.qip
+set_global_assignment -name QIP_FILE ../ip/fifo_data/fifo_data.qip
+set_global_assignment -name VERILOG_FILE ../src/jichuang.v
+set_global_assignment -name VERILOG_FILE ../src/ov5640/vga_driver.v
+set_global_assignment -name VERILOG_FILE ../src/ov5640/vga_ctrl.v
+set_global_assignment -name VERILOG_FILE ../src/ov5640/i2c_ov5640_rgb565_cfg.v
+set_global_assignment -name VERILOG_FILE ../src/ov5640/i2c_dri.v
+set_global_assignment -name VERILOG_FILE ../src/ov5640/cmos_capture_data.v
+set_global_assignment -name VERILOG_FILE ../src/sdram/wrfifo.v
+set_global_assignment -name VERILOG_FILE ../src/sdram/sdram_top.v
+set_global_assignment -name VERILOG_FILE ../src/sdram/sdram_para.v
+set_global_assignment -name VERILOG_FILE ../src/sdram/sdram_fifo_ctrl.v
+set_global_assignment -name VERILOG_FILE ../src/sdram/sdram_data.v
+set_global_assignment -name VERILOG_FILE ../src/sdram/sdram_ctrl.v
+set_global_assignment -name VERILOG_FILE ../src/sdram/sdram_controller.v
+set_global_assignment -name VERILOG_FILE ../src/sdram/sdram_cmd.v
+set_global_assignment -name VERILOG_FILE ../src/sdram/rdfifo.v
+set_global_assignment -name MIF_FILE cangku.mif
+set_global_assignment -name MIF_FILE output_files/target_init.mif
+set_global_assignment -name QIP_FILE ../ip/target_init_rom/target_init_rom.qip
+set_global_assignment -name EDA_TEST_BENCH_NAME tb_angle_bias_pro -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id tb_angle_bias_pro
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "1 ms" -section_id tb_angle_bias_pro
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME tb_angle_bias_pro -section_id tb_angle_bias_pro
+set_global_assignment -name EDA_TEST_BENCH_FILE ../sim/tb_jixiebi_top.v -section_id tb_jixiebi_top
+set_global_assignment -name EDA_TEST_BENCH_FILE ../sim/tb_servo.v -section_id five_servo_control_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE ../sim/tb_servo.v -section_id tb_servo
+set_global_assignment -name EDA_TEST_BENCH_FILE ../sim/tb_block_ctrl.v -section_id tb_block_ctrl
+set_global_assignment -name EDA_TEST_BENCH_FILE ../ip/target_init_rom/target_init_rom.qip -section_id tb_block_ctrl
+set_global_assignment -name EDA_TEST_BENCH_FILE ../ip/target_init_rom/target_init_rom.v -section_id tb_block_ctrl
+set_global_assignment -name EDA_TEST_BENCH_FILE ../sim/test.v -section_id test
+set_global_assignment -name EDA_TEST_BENCH_FILE ../ip/cangku_pos/cangku_pos_rom.v -section_id test
+set_global_assignment -name EDA_TEST_BENCH_FILE ../src/robotic/cangku_lut.v -section_id test
+set_global_assignment -name EDA_TEST_BENCH_FILE ../sim/tb_angle_bias_pro.v -section_id tb_angle_bias_pro
+set_global_assignment -name EDA_TEST_BENCH_FILE "../src/img_pro/Bias angle_pro.v" -section_id tb_angle_bias_pro
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

@@ -1,0 +1,208 @@
+`timescale 1ns / 1ps
+
+module tb_img;
+
+    // 测试参数
+    parameter CLK_PERIOD = 10;  // 100MHz时钟
+    
+    // 模块接口信号
+    reg clk;
+    reg rst_n;
+    reg valid_i;
+    reg img_data_i;
+    
+    // 输出信号声明
+    wire [40:0] location_o [0:3];  // 目标边界信息
+    wire [15:0] X         [0:3];   // X坐标
+    wire [15:0] Y         [0:3];   // Y坐标
+    wire [3:0]  Shape     [0:3];   // 形状编码
+    wire [15:0] Area      [0:3];    // 面积
+    wire [7:0]  height_r  [0:3];   // 高度
+    wire [7:0]  width_r   [0:3];    // 宽度
+    wire [3:0]  target_count;      // 目标数量
+    wire        data_valid;        // 数据有效
+    
+    // 显示参数宏定义
+    `define SHAPE_NAME(shape_code) \
+        (shape_code == 4'b0001) ? "六边形" : \
+        (shape_code == 4'b0010) ? "正方形" : \
+        (shape_code == 4'b0100) ? "圆形"   : \
+        (shape_code == 4'b1000) ? "三角形" : "未知"
+    
+    // 实例化被测模块
+    Object_detection_multi #(
+        .IMG_HDISP(640),
+        .IMG_VDISP(480),
+        .MAX_TARGETS(4),
+        .MIN_DIST(10),
+        .MIN_TARGET_SIZE(50),
+        .AREA_SQUARE_MIN(3500),
+        .AREA_SQUARE_MAX(4500),
+        .AREA_CIRCLE_MIN(2500),
+        .AREA_CIRCLE_MAX(3500),
+        .AREA_TRIANGLE_MAX(2500)
+    ) dut (
+        .Clk(clk),
+        .Rst_n(rst_n),
+        .valid_i(valid_i),
+        .img_data_i(img_data_i),
+        .location_o(location_o),
+        .X(X),
+        .Y(Y),
+        .Shape(Shape),
+        .Area(Area),
+        .height_r(height_r),
+        .width_r(width_r),
+        .target_count(target_count),
+        .data_valid(data_valid)
+    );
+    
+    // 时钟生成
+    always #(CLK_PERIOD/2) clk = ~clk;
+    
+    // 主测试流程
+    initial begin
+        init_signals();
+        reset_system();
+        
+        // 测试案例1：单个目标
+        $display("\n=== 测试案例1：单目标检测 ===");
+        draw_rectangle(200, 200, 260, 260);  // 60x60正方形
+        wait_processing_done();
+        show_detection_results();
+        
+        // 测试案例2：多目标（修正三角形参数）
+        $display("\n=== 测试案例2：多目标检测 ===");
+        draw_rectangle(100, 100, 160, 160);  // 正方形
+        draw_circle(300, 300, 30);           // 圆形
+        draw_triangle(400, 200, 460, 200, 430, 260); // 修正：6个参数
+        wait_processing_done();
+        show_detection_results();
+        
+        #50 $finish;
+    end
+
+    //--------------------------------------------------
+    // 基础功能函数
+    //--------------------------------------------------
+    task init_signals;
+    begin
+        clk = 0;
+        rst_n = 0;
+        valid_i = 0;
+        img_data_i = 0;
+    end
+    endtask
+
+    task reset_system;
+    begin
+        #100 rst_n = 1;
+        #200;
+    end
+    endtask
+
+    //--------------------------------------------------
+    // 绘图功能
+    //--------------------------------------------------
+    task draw_rectangle;
+    input [15:0] x_start, y_start, x_end, y_end;
+    begin
+        $display("绘制矩形：X[%0d-%0d] Y[%0d-%0d]",x_start,x_end,y_start,y_end);
+        for (int y = y_start; y <= y_end; y++) begin
+            for (int x = x_start; x <= x_end; x++) begin
+                if (x < 640 && y < 480) begin
+                    send_pixel(x, y);
+                end
+            end
+        end
+    end
+    endtask
+
+    task draw_circle;
+    input [15:0] center_x, center_y, radius;
+    begin
+        $display("绘制圆形：中心(%0d,%0d) 半径%0d",center_x,center_y,radius);
+        for (int y = center_y - radius; y <= center_y + radius; y++) begin
+            for (int x = center_x - radius; x <= center_x + radius; x++) begin
+                if ((x - center_x)**2 + (y - center_y)**2 <= radius**2) begin
+                    if (x < 640 && y < 480 && x >= 0 && y >= 0) begin
+                        send_pixel(x, y);
+                    end
+                end
+            end
+        end
+    end
+    endtask
+
+    task draw_triangle;
+    input [15:0] x1, y1, x2, y2, x3, y3; // 需要6个参数
+    begin
+        $display("绘制三角形：顶点(%0d,%0d)(%0d,%0d)(%0d,%0d)",x1,y1,x2,y2,x3,y3);
+        // 绘制外接矩形
+        draw_rectangle(
+            (x1 < x2 && x1 < x3) ? x1 : (x2 < x3) ? x2 : x3,
+            (y1 < y2 && y1 < y3) ? y1 : (y2 < y3) ? y2 : y3,
+            (x1 > x2 && x1 > x3) ? x1 : (x2 > x3) ? x2 : x3,
+            (y1 > y2 && y1 > y3) ? y1 : (y2 > y3) ? y2 : y3
+        );
+    end
+    endtask
+
+    //--------------------------------------------------
+    // 像素传输
+    //--------------------------------------------------
+    task send_pixel;
+    input [15:0] x, y;
+    begin
+        @(posedge clk);
+        valid_i = 1;
+        img_data_i = 1;
+        #1;
+    end
+    endtask
+
+    //--------------------------------------------------
+    // 结果显示
+    //--------------------------------------------------
+    task show_detection_results;
+    begin
+        $display("\n[检测结果报告]");
+        $display("有效目标数量：%0d", target_count);
+        
+        for (int i = 0; i < 4; i++) begin
+            if (location_o[i][40]) begin
+                $display("目标%-2d: X=%-4d Y=%-4d 形状=%-6s 尺寸=%0dx%0d", 
+                    i, X[i], Y[i], `SHAPE_NAME(Shape[i]), width_r[i], height_r[i]);
+            end
+        end
+        $display("------------------------");
+    end
+    endtask
+
+    //--------------------------------------------------
+    // 处理完成等待
+    //--------------------------------------------------
+    task wait_processing_done;
+    begin
+        fork : wait_timeout
+            begin
+                wait(data_valid);
+                $display("检测完成");
+            end
+            begin
+                #5000000;
+                $display("错误：处理超时！");
+                $stop;
+            end
+        join_any
+        disable wait_timeout;
+    end
+    endtask
+
+    波形记录
+    // initial begin
+        // $dumpfile("wave.vcd");
+        // $dumpvars(0, tb_img);
+    // end
+
+endmodule

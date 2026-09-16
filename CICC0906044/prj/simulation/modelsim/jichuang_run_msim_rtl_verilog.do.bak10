@@ -1,0 +1,74 @@
+transcript on
+if ![file isdirectory verilog_libs] {
+	file mkdir verilog_libs
+}
+
+vlib verilog_libs/altera_ver
+vmap altera_ver ./verilog_libs/altera_ver
+vlog -vlog01compat -work altera_ver {d:/baidunetdiskdownload/new_quartus/quartus/eda/sim_lib/altera_primitives.v}
+
+vlib verilog_libs/lpm_ver
+vmap lpm_ver ./verilog_libs/lpm_ver
+vlog -vlog01compat -work lpm_ver {d:/baidunetdiskdownload/new_quartus/quartus/eda/sim_lib/220model.v}
+
+vlib verilog_libs/sgate_ver
+vmap sgate_ver ./verilog_libs/sgate_ver
+vlog -vlog01compat -work sgate_ver {d:/baidunetdiskdownload/new_quartus/quartus/eda/sim_lib/sgate.v}
+
+vlib verilog_libs/altera_mf_ver
+vmap altera_mf_ver ./verilog_libs/altera_mf_ver
+vlog -vlog01compat -work altera_mf_ver {d:/baidunetdiskdownload/new_quartus/quartus/eda/sim_lib/altera_mf.v}
+
+vlib verilog_libs/altera_lnsim_ver
+vmap altera_lnsim_ver ./verilog_libs/altera_lnsim_ver
+vlog -sv -work altera_lnsim_ver {d:/baidunetdiskdownload/new_quartus/quartus/eda/sim_lib/altera_lnsim.sv}
+
+vlib verilog_libs/cycloneive_ver
+vmap cycloneive_ver ./verilog_libs/cycloneive_ver
+vlog -vlog01compat -work cycloneive_ver {d:/baidunetdiskdownload/new_quartus/quartus/eda/sim_lib/cycloneive_atoms.v}
+
+if {[file exists rtl_work]} {
+	vdel -lib rtl_work -all
+}
+vlib rtl_work
+vmap work rtl_work
+
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/img_pro {D:/Ji_Chuang/SSS1.0/src/img_pro/Target_tags.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/img_pro {D:/Ji_Chuang/SSS1.0/src/img_pro/Object_detection_aa2.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/img_pro {D:/Ji_Chuang/SSS1.0/src/img_pro/Line_Shift_RAM_1Bit.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/img_pro {D:/Ji_Chuang/SSS1.0/src/img_pro/Matrix_Generate_3X3_1Bit.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/img_pro {D:/Ji_Chuang/SSS1.0/src/img_pro/Bit_Erosion_Detector.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/img_pro {D:/Ji_Chuang/SSS1.0/src/img_pro/Bit_Dilation_Detector.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/key,smg {D:/Ji_Chuang/SSS1.0/src/key,smg/key_scan.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/Serial {D:/Ji_Chuang/SSS1.0/src/Serial/uart_tx.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/Serial {D:/Ji_Chuang/SSS1.0/src/Serial/tx_pro.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/img_pro {D:/Ji_Chuang/SSS1.0/src/img_pro/RGB2HSV.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/img_pro {D:/Ji_Chuang/SSS1.0/src/img_pro/img_pro.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/img_pro {D:/Ji_Chuang/SSS1.0/src/img_pro/HSV_binarization.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/img_pro {D:/Ji_Chuang/SSS1.0/src/img_pro/divide.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/ip/pll_clk {D:/Ji_Chuang/SSS1.0/ip/pll_clk/pll_clk.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src {D:/Ji_Chuang/SSS1.0/src/jichuang.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/ov5640 {D:/Ji_Chuang/SSS1.0/src/ov5640/vga_driver.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/ov5640 {D:/Ji_Chuang/SSS1.0/src/ov5640/i2c_ov5640_rgb565_cfg.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/ov5640 {D:/Ji_Chuang/SSS1.0/src/ov5640/i2c_dri.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/ov5640 {D:/Ji_Chuang/SSS1.0/src/ov5640/cmos_capture_data.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/sdram {D:/Ji_Chuang/SSS1.0/src/sdram/wrfifo.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/sdram {D:/Ji_Chuang/SSS1.0/src/sdram/sdram_top.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/sdram {D:/Ji_Chuang/SSS1.0/src/sdram/sdram_para.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/sdram {D:/Ji_Chuang/SSS1.0/src/sdram/sdram_fifo_ctrl.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/sdram {D:/Ji_Chuang/SSS1.0/src/sdram/sdram_controller.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/sdram {D:/Ji_Chuang/SSS1.0/src/sdram/rdfifo.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/prj/db {D:/Ji_Chuang/SSS1.0/prj/db/pll_clk_altpll.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/sdram {D:/Ji_Chuang/SSS1.0/src/sdram/sdram_data.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/sdram {D:/Ji_Chuang/SSS1.0/src/sdram/sdram_ctrl.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/src/sdram {D:/Ji_Chuang/SSS1.0/src/sdram/sdram_cmd.v}
+
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/prj/../sim {D:/Ji_Chuang/SSS1.0/prj/../sim/tb_img.v}
+vlog -sv -work work +incdir+D:/Ji_Chuang/SSS1.0/prj/../src/img_pro {D:/Ji_Chuang/SSS1.0/prj/../src/img_pro/Object_detection_aa2.v}
+
+vsim -t 1ps -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneive_ver -L rtl_work -L work -voptargs="+acc"  tb_img
+
+add wave *
+view structure
+view signals
+run 1 us

@@ -1,0 +1,37 @@
+# Quartus generated databases and output
+CICC0906044/prj/.qsys_edit/
+CICC0906044/prj/db/
+CICC0906044/prj/incremental_db/
+CICC0906044/prj/output_files/
+**/greybox_tmp/
+CICC0906044/prj/*.rpt
+CICC0906044/prj/*.qws
+
+# ModelSim generated libraries, netlists, and waveform data
+CICC0906044/prj/simulation/modelsim/rtl_work/
+CICC0906044/prj/simulation/modelsim/verilog_libs/
+CICC0906044/prj/simulation/modelsim/work/
+CICC0906044/prj/simulation/modelsim/*.vo
+CICC0906044/prj/simulation/modelsim/*.sdo
+CICC0906044/prj/simulation/modelsim/*.vcd
+CICC0906044/prj/simulation/modelsim/*.wlf
+CICC0906044/prj/simulation/modelsim/*.xrf
+CICC0906044/prj/simulation/modelsim/wlft*
+CICC0906044/prj/simulation/modelsim/msim_transcript
+
+# Keil build output and per-user state
+**/Objects/
+**/Listings/
+**/DebugConfig/
+*.uvoptx
+*.uvguix.*
+
+# Rebuildable standalone executable
+CICC0906044+初赛+c语言逆解验证.exe
+
+# Temporary files and logs
+*.log
+*.tmp
+*.temp
+*~
+~$*

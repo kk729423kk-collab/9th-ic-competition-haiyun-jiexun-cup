@@ -1,0 +1,87 @@
+`timescale 1ns/1ns
+
+module tb_servo();
+
+// 时钟和复位信号
+reg clk = 0;
+reg rst_n = 0;
+reg en = 0;
+
+// 角度变化输入（有符号）
+reg signed [11:0] delta_angle1 = 0;
+reg signed [11:0] delta_angle2 = 0;
+reg signed [11:0] delta_angle3 = 0;
+reg signed [11:0] delta_angle4 = 0;
+reg signed [11:0] delta_angle5 = 0;
+
+// 输出信号
+wire angle_error;
+wire motion_done;
+wire pwm1, pwm2, pwm3, pwm4, pwm5;
+
+// 生成50MHz时钟（周期20ns）
+always #10 clk = ~clk;
+
+// 实例化被测模块
+servo_ctrl dut (
+    .clk(clk),
+    .rst_n(rst_n),
+    .en(en),
+    .delta_angle1(delta_angle1),
+    .delta_angle2(delta_angle2),
+    .delta_angle3(delta_angle3),
+    .delta_angle4(delta_angle4),
+    .delta_angle5(delta_angle5),
+    .angle_error(angle_error),
+    .motion_done(motion_done),
+    .pwm_servo1(pwm1),
+    .pwm_servo2(pwm2),
+    .pwm_servo3(pwm3),
+    .pwm_servo4(pwm4),
+    .pwm_servo5(pwm5)
+);
+defparam dut.u_five_servo.servo1.PWM_PERIOD = 1_000;
+defparam dut.u_five_servo.servo1.BASE_PULSE = 25;
+defparam dut.u_five_servo.servo1.INTERNAL_SPEED = 100;
+
+defparam dut.u_five_servo.servo2.PWM_PERIOD = 1_000;
+defparam dut.u_five_servo.servo2.BASE_PULSE = 25;
+defparam dut.u_five_servo.servo2.INTERNAL_SPEED = 100;
+
+defparam dut.u_five_servo.servo3.PWM_PERIOD = 1_000;
+defparam dut.u_five_servo.servo3.BASE_PULSE = 25;
+defparam dut.u_five_servo.servo3.INTERNAL_SPEED = 100;
+
+defparam dut.u_five_servo.servo4.PWM_PERIOD = 1_000;
+defparam dut.u_five_servo.servo4.BASE_PULSE = 25;
+defparam dut.u_five_servo.servo4.INTERNAL_SPEED = 100;
+
+defparam dut.u_five_servo.servo5.PWM_PERIOD = 1_000;
+defparam dut.u_five_servo.servo5.BASE_PULSE = 25;
+defparam dut.u_five_servo.servo5.INTERNAL_SPEED = 100;
+// 主测试流程
+initial begin
+    // 生成波形文件（用于查看信号）
+    $dumpfile("servo_ctrl.vcd");
+    $dumpvars(0, servo_ctrl_tb);
+    
+    // 复位（保持100ns）
+    #100 rst_n = 1;
+    
+    // 测试1：单个舵机运动（舵机1增加45度）
+    en = 1;
+    delta_angle1 = 450;  // +45.0°
+    #200000;  // 等待200us（约10个PWM周期）
+    
+    // 测试2：多个舵机同时运动
+    delta_angle1 = 0;    // 停止舵机1
+    delta_angle2 = -300; // 舵机2减少30°
+    delta_angle3 = 200;  // 舵机3增加20°
+    #200000;
+    
+    // 测试3：角度超限检查
+    delta_angle5 = 1000; // 尝试让舵机5增加100°（超过180°限制）
+    #100000;
+    
+    
+end

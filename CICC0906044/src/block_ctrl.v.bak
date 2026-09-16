@@ -1,0 +1,121 @@
+module block_controller(
+    input wire clk,
+    input wire reset_n,
+    // 系统控制接口
+    input wire sys_start,
+    // 视觉系统接口
+    output reg [4:0] vision_pos,   // 请求位置索引
+    output reg [1:0] req_color,    // 请求颜色
+    output reg [1:0] req_shape,    // 请求形状
+    output reg [1:0] req_angle,    // 请求角度
+    output reg req_vision,         // 视觉请求使能
+    // 机械臂接口
+    input wire arm_done,           // 完成信号
+    // 调试接口
+    output reg [3:0] debug_state,
+    output reg sys_finish          // 系统完成标志
+);
+localparam SHAPE_IRREGULAR = 2'b00;  // 三角
+localparam SHAPE_HEXAGON   = 2'b01;  // 六边形
+localparam SHAPE_CIRCLE    = 2'b10;  // 圆形
+localparam SHAPE_SQUARE    = 2'b11;  // 正方形
+
+localparam COLOR_RED   = 2'b00;
+localparam COLOR_BLUE  = 2'b01;
+localparam COLOR_YELLOW = 2'b10;
+localparam COLOR_BLACK = 2'b11;
+
+// 目标仓库定义（7位宽）
+// bit[6:5]颜色 | bit[4:3]形状 | bit[2:1]角度 | bit[0]需放置
+reg [6:0] target_grid [0:23];
+integer i;
+initial begin
+    // 初始化所有位置
+    for(i=0; i<24; i=i+1) 
+        target_grid[i] = 7'd0;
+    // 设置示例目标
+    target_grid[23]  = {COLOR_RED,  SHAPE_SQUARE,   2'b00, 1'b0};
+    target_grid[22]  = {COLOR_BLUE,  SHAPE_CIRCLE,  2'b00, 1'b0};
+    target_grid[21]  = {COLOR_RED,  SHAPE_HEXAGON,  2'b00, 1'b0};
+    target_grid[20] =  {COLOR_BLUE,  SHAPE_IRREGULAR,2'b00, 1'b0};
+end
+
+// 工作计数器
+reg [4:0] grid_cnt;  // 当前处理网格索引(0-23)
+
+
+// 状态机定义
+parameter S_IDLE      = 3'd0;  // 空闲状态
+parameter S_FIND_DIFF = 3'd1;  // 查找差异
+parameter S_REQ_VISION= 3'd2;  // 请求视觉
+parameter S_WAIT_ARM  = 3'd3;  // 等待机械臂
+parameter SYS_FINISH  = 3'd4;  // 系统完成
+reg [2:0] state;
+
+// 主状态机
+always @(posedge clk or negedge reset_n) begin
+    if(!reset_n) begin
+        state <= S_IDLE;
+        req_vision <= 1'b0;
+        grid_cnt <= 5'd0;
+        sys_finish <= 1'b0;
+        debug_state <= 4'd0;
+        vision_pos <= 5'd0;
+        req_color <= 2'd0;
+        req_shape <= 2'd0;
+        req_angle <= 2'd0;
+    end else begin
+        case(state)
+            S_IDLE: begin
+                if(sys_start) begin
+                    state <= S_FIND_DIFF;
+                    grid_cnt <= 5'd0;
+                    debug_state <= 4'd1;
+                end
+            end
+            S_FIND_DIFF: begin
+                if(target_grid[grid_cnt][0]) begin
+                    // 提取目标信息
+                    vision_pos <= grid_cnt;
+                    req_color <= target_grid[grid_cnt][6:5];
+                    req_shape <= target_grid[grid_cnt][4:3];
+                    req_angle <= target_grid[grid_cnt][2:1];
+                    state <= S_REQ_VISION;
+                    debug_state <= 4'd2;
+                end 
+                else if(grid_cnt != 5'd23) begin
+                    grid_cnt <= grid_cnt + 1'b1;
+                end 
+                else begin
+                    state <= SYS_FINISH;
+                    debug_state <= 4'd4;
+                end
+            end
+            
+            S_REQ_VISION: begin
+                req_vision <= 1'b1;
+                state <= S_WAIT_ARM;
+                debug_state <= 4'd3;
+            end
+            
+            S_WAIT_ARM: begin
+                if(arm_done) 
+                begin
+                    if(grid_cnt!=23)
+                        state <= S_FIND_DIFF;
+                    end 
+                    else begin
+                        state <= SYS_FINISH;
+                        req_vision <= 1'b0;
+                    end
+                end
+            end  
+            SYS_FINISH: begin
+                sys_finish <= 1'b1;
+                debug_state <= 4'd5;
+            end
+        endcase
+    end
+end
+
+endmodule

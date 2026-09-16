@@ -1,0 +1,194 @@
+`timescale 1ns / 1ps
+
+module img_pro
+(
+    // 系统接口
+    input               Clk,          // 系统时钟 (74.25MHz)
+    input               Rst_n,        // 异步复位 (低有效)
+    
+    // 摄像头输入
+    input               vsync,        // 场同步信号
+    input               href,         // 行同步信号
+    input               vld,          // 数据有效标志
+    input       [23:0]  data_in,      // RGB888像素数据
+    input       [15:0] data_in1,
+    input       [1:0]   target_shape ,
+    // 处理输出
+    output [23:0]       center_hsv,   // 中心区域HSV均值
+    output              img_vld,      // 输出图像有效标志
+    output [15:0]       img_data,      // 标记后的RGB图像
+    output [3:0]        target_vld,
+    output [13:0]       area_out[3:0],
+    output [1:0]        shape,
+    output wire [15:0]  real_x,         // X坐标(整数mm)
+    output wire [15:0]  real_y         // Y坐标(整数mm)
+);
+
+    //---------------- 参数定义 -----------------//
+    parameter [10:0] IMG_HDISP = 11'd640;  // 图像水平分辨率
+    parameter [10:0] IMG_VDISP = 11'd480;  // 图像垂直分辨率
+
+    //---------------- 信号声明 -----------------//
+    // HSV转换输出
+    wire        hsv_vs, hsv_hs, hsv_vld;
+    wire [23:0] hsv_out;
+    
+    // 二值化输出
+    wire        bin_vs, bin_hs, bin_vld;
+    wire        bin_out;
+    
+    // 形态学处理
+    wire [3:0]  erode_vsync, erode_href, erode_clken, erode_bit;
+    wire        dilate_vsync, dilate_href, dilate_vld, dilate_bit;
+    
+    // 目标检测信号
+    wire [40:0] location_o [0:3];      // 目标边界信息
+    wire [15:0] X        [0:3];        // 目标中心X坐标
+    wire [15:0] Y        [0:3];        // 目标中心Y坐标
+    wire [3:0]  Shape    [0:3];        // 形状编码
+  
+
+    //---------------- 模块实例化 -----------------//
+
+    // RGB转HSV模块
+    RGB2HSV RGB2HSV_inst (
+        .Clk        (Clk),
+        .Rst        (~Rst_n),
+        .vs         (vsync),
+        .hs         (href),
+        .valid_i    (vld),
+        .rgb_data_i (data_in),
+        .hsv_vs     (hsv_vs),
+        .hsv_hs     (hsv_hs),
+        .valid_o    (hsv_vld),
+        .center_hsv (center_hsv),
+        .hsv_data_o (hsv_out)
+    );
+
+    // HSV二值化模块
+    HSV_binarization HSV_binarization_inst (
+        .Clk          (Clk),
+        .Rst_n        (Rst_n),
+        .hsv_h        (hsv_out[23:16]),
+        .hsv_s        (hsv_out[15:8]),
+        .hsv_v        (hsv_out[7:0]),
+        .hsv_vs       (hsv_vs),
+        .hsv_hs       (hsv_hs),
+        .hsv_vld      (hsv_vld),
+        .binary_pixel (bin_out),
+        .vs_out       (bin_vs),
+        .hs_out       (bin_hs),
+        .vld_out      (bin_vld)
+    );
+
+    // 四级腐蚀处理
+    generate
+        genvar i;
+        for (i=0; i<2; i=i+1) begin : ERODE
+            Bit_Erosion_Detector #(
+                .IMG_HDISP(IMG_HDISP),
+                .IMG_VDISP(IMG_VDISP)
+            ) u_Erosion (
+                .clk               (Clk),
+                .rst_n             (Rst_n),
+                .per_frame_vsync   (i==0 ? bin_vs      : erode_vsync[i-1]),
+                .per_frame_href    (i==0 ? bin_hs      : erode_href[i-1]),
+                .per_frame_clken   (i==0 ? bin_vld     : erode_clken[i-1]),
+                .per_img_Bit       (i==0 ? bin_out     : erode_bit[i-1]),
+                .post_frame_vsync  (erode_vsync[i]),
+                .post_frame_href   (erode_href[i]),
+                .post_frame_clken  (erode_clken[i]),
+                .post_img_Bit      (erode_bit[i])
+            );
+        end
+    endgenerate
+
+    // 一级膨胀处理
+    Bit_Dilation_Detector #(
+        .IMG_HDISP(IMG_HDISP),
+        .IMG_VDISP(IMG_VDISP)
+    ) u_Dilation (
+        .clk               (Clk),
+        .rst_n             (Rst_n),
+        .per_frame_vsync   (erode_vsync[3]),
+        .per_frame_href    (erode_href[3]),
+        .per_frame_clken   (erode_clken[3]),
+        .per_img_Bit       (erode_bit[3]),
+        .post_frame_vsync  (dilate_vsync),
+        .post_frame_href   (dilate_href),
+        .post_frame_clken  (dilate_vld),
+        .post_img_Bit      (dilate_bit)
+    );
+//第二帧图像
+wire [42:0] target_out [3:0];
+assign target_vld={target_out[0][40],target_out[1][40],target_out[2][40],target_out[3][40]};
+assign shape=target_out[0][42:41];
+//wire [13:0] area_out [3:0];
+//位置检测、形状识别
+shape_recognition  u_shape_recognition(
+	.clk					  (Clk),  	
+	.rst_n	    			  (Rst_n),
+
+	.per_frame_vsync		  (dilate_vsync),		
+	.per_frame_href		      (dilate_href),		    
+	.per_frame_clken		  (dilate_vld),		 
+	.per_img_Bit			  (dilate_bit),						
+	
+	.target_out			   (target_out	),
+    .area_out              (area_out),
+	.MIN_DIST              (6       ),
+	);
+
+//----------------------------------------------------
+
+wire			post4_frame_vsync	;
+wire			post4_frame_href	;
+wire			post4_frame_clken	;
+wire  [15:0] out_img_Y ; //输出RGB565数据
+//绘制各物块的边界
+VIP_Video_add_rectangular u_VIP_Video_add_rectangular
+(
+	//global clock
+	.clk					(Clk),  				 
+	.rst_n					(Rst_n),	
+	
+ 	//在彩色图像上画方框          
+	.per_frame_vsync		(vsync   ),	 
+	.per_frame_href		    (href    ),	 
+   .per_frame_clken 	    (vld   ),	 
+	.in_img    			    (data_in1	  ),
+   .flag                    (4'd1    ),
+    //各边界位置
+   .up_pos                  (46   ),  //46
+   .down_pos                (405  ),//402
+	.left_pos               (32   ),  //32
+   .right_pos               (572  ), //572
+	.target_out		   (target_out	),
+
+	//Image data has been processd                 
+	.post_frame_vsync		(post4_frame_vsync	), 
+	.post_frame_href	    (post4_frame_href	), 
+	.post_frame_clken	   (post4_frame_clken	), 
+	.out_img_Y			    (out_img_Y     	)
+);
+data_ctrl   data_ctrl_inst
+(
+    
+    . clk(Clk),            // 系统时钟
+    . rst_n(Rst_n),          // 异步复位(低电平有效)
+    
+    // 目标输入接口
+    .target_out (target_out),  // 4个目标信息
+   . target_shape(target_shape),    // 要输出的目标形状编码
+    
+    // 实际坐标输出(整数)
+     .real_x(real_x),         // X坐标(整数mm)
+     .real_y(real_y),         // Y坐标(整数mm)
+    . valid()           // 坐标有效标志
+);
+
+    //---------------- 输出连接 -----------------//
+    assign img_vld = post4_frame_clken;
+    assign img_data = out_img_Y;
+
+endmodule

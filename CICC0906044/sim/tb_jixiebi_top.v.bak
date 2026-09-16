@@ -1,0 +1,97 @@
+`timescale 1ns/1ns
+
+module tb_jixiebi_top;
+
+// 测试参数
+parameter CLK_PERIOD = 20;  // 50MHz时钟周期(20ns)
+
+// 输入信号
+reg clk;
+reg rst_n;
+reg signed [15:0] target_x;
+reg signed [15:0] target_y;
+reg target_valid;
+
+// 输出信号
+wire qibeng_tx;
+wire finish;
+wire [3:0] state;
+wire pwm_servo1;
+wire pwm_servo2;
+wire pwm_servo3;
+wire pwm_servo4;
+wire pwm_servo5;
+
+// 实例化被测模块
+jixiebi_top 
+#(
+    .CLK_FREQ (5000);  // 计时频率50MHz
+    .PWM_PERIOD(10000),    // 20us代替20ms（加速1000倍）
+    .BASE_PULSE(250),       // 500ns代替0.5ms
+    .INTERNAL_SPEED(10)   // 加速运动控制
+    
+)uut
+(
+    .clk(clk),
+    .rst_n(rst_n),
+    .target_x(target_x),
+    .target_y(target_y),
+    .target_valid(target_valid),
+    .target_cangku_addr(23),
+    .qibeng_tx(qibeng_tx),
+    .pwm_servo1(pwm_servo1),
+    .pwm_servo2(pwm_servo2),
+    .pwm_servo3(pwm_servo3),
+    .pwm_servo4(pwm_servo4),
+    .pwm_servo5(pwm_servo5),
+    .finish(finish),
+    .state(state)
+);
+
+// 时钟生成
+initial begin
+    clk = 0;
+    forever #(CLK_PERIOD/2) clk = ~clk;
+end
+
+// 测试激励
+initial begin
+    // 初始化
+    rst_n = 0;
+    target_x = 0;
+    target_y = 0;
+    target_valid = 0;
+    
+    // 复位
+    #100;
+    rst_n = 1;
+    #100;
+    
+    // 测试场景1：移动到目标位置并抓取
+    $display("=== 测试场景1：移动到(100,50)并抓取 ===");
+    target_x = 112;
+    target_y = 224;
+    target_valid = 1;
+    #CLK_PERIOD;
+    target_valid = 0;
+    
+
+end
+
+// 监控信号变化
+always @(state) begin
+    case(state)
+        4'd0: $display("[%t ns] 状态：IDLE", $time);
+        4'd1: $display("[%t ns] 状态：MOVE_TO_PICK_PREP", $time);
+        4'd2: $display("[%t ns] 状态：MOVE_TO_PICK", $time);
+        4'd3: $display("[%t ns] 状态：PUMP_ON", $time);
+        4'd4: $display("[%t ns] 状态：WAIT_PUMP", $time);
+        4'd5: $display("[%t ns] 状态：LIFT_UP", $time);
+        4'd6: $display("[%t ns] 状态：MOVE_TO_STORE", $time);
+        4'd7: $display("[%t ns] 状态：PUMP_OFF", $time);
+        4'd8: $display("[%t ns] 状态：WAIT_RELEASE", $time);
+        4'd9: $display("[%t ns] 状态：DONE", $time);
+        default: $display("[%t ns] 未知状态", $time);
+    endcase
+end
+endmodule
